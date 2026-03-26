@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zen's Slope</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="startScreen">
+    <div class="start-snowflakes" id="startSnowflakes"></div>
+    <div class="start-logo">
+      <h1>ZEN'S SLOPE</h1>
+      <div class="subtitle">A minimalist descent</div>
+    </div>
+    
+    <div class="story-text">
+      <p>The mountain is quiet.</p>
+      </div>
+
+    <div class="tap-prompt">Tap to begin</div>
+
+    <div class="controls-hint">
+      <p>Space / Tap — Jump &nbsp;|&nbsp; Double — High Jump</p>
+      <p>Hold in air — Backflip (Boosts Speed)</p>
+    </div>
+  </div>
+
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="hud">
+    <div id="scoreDisplay">
+      <div id="scoreValue">0</div>
+      <div id="distanceValue">0 m</div>
+    </div>
+    <div id="comboDisplay">✦ x1</div>
+    <div id="trickText"></div>
+    <div id="pauseBtn">
+      <div class="pause-bar"></div>
+      <div class="pause-bar"></div>
+    </div>
+  </div>
+
+  <div id="pauseScreen">
+    <div class="pause-title">Paused</div>
+    <button class="resume-btn" id="resumeBtn">Resume</button>
+  </div>
+
+  <div id="gameOverScreen">
+    <div class="game-over-content">
+      <div class="game-over-title">The slope ends here</div>
+      <div class="game-over-tagline" id="crashReason">find your zen again</div>
+      <div class="score-final" id="finalScore">0</div>
+      <div class="score-label">final score</div>
+      <div class="coins-final" id="finalCoins">0 coins earned</div>
+      <div class="distance-final" id="finalDistance">0 m traveled</div>
+      <button class="restart-btn" id="restartBtn">Try Again</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

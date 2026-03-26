@@ -1,0 +1,399 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@100;200;300;400&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #050508;
+  overflow: hidden;
+  font-family: 'Raleway', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#gameCanvas {
+  display: block;
+  position: absolute;
+  top: 0; left: 0;
+}
+
+/* ── START SCREEN ── */
+#startScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #111 0%, #050508 100%);
+  z-index: 100;
+  transition: transform 1.5s cubic-bezier(0.5, 0, 0.1, 1), opacity 1.5s ease;
+}
+
+/* Scrolling story transition */
+#startScreen.scroll-up {
+  transform: translateY(-100vh);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.start-logo {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.start-logo h1 {
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  font-size: clamp(42px, 8vw, 86px);
+  letter-spacing: 0.15em;
+  color: #fff;
+  line-height: 1;
+}
+
+.start-logo .subtitle {
+  font-weight: 100;
+  font-size: clamp(12px, 2vw, 16px);
+  letter-spacing: 0.5em;
+  color: rgba(255,255,255,0.5);
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+
+.story-text {
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+  font-weight: 200;
+  letter-spacing: 0.1em;
+  margin-bottom: 60px;
+  line-height: 1.8;
+}
+
+.tap-prompt {
+  font-weight: 200;
+  font-size: clamp(14px, 2.5vw, 18px);
+  letter-spacing: 0.3em;
+  color: #fff;
+  text-transform: uppercase;
+  animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+.start-snowflakes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.start-snowflake {
+  position: absolute;
+  top: -10px;
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  animation: snowFall linear infinite;
+}
+
+@keyframes snowFall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ── HUD ── */
+#hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#hud.visible { opacity: 1; }
+
+#scoreDisplay {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+#scoreValue {
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  font-size: clamp(28px, 4vw, 48px);
+  color: #fff;
+  line-height: 1;
+}
+
+#distanceValue {
+  font-weight: 200;
+  font-size: clamp(11px, 1.5vw, 14px);
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+#comboDisplay {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(16px, 2.5vw, 24px);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#comboDisplay.visible { opacity: 1; }
+
+#trickText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(20px, 3vw, 32px);
+  color: #fff;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+#pauseBtn {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  pointer-events: all;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+#pauseBtn:hover { opacity: 1; }
+
+.pause-bar {
+  width: 3px;
+  height: 18px;
+  background: #fff;
+}
+
+/* ── MENUS (Game Over & Pause) ── */
+#gameOverScreen, #pauseScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5,5,8,0.9);
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+
+#gameOverScreen.visible, #pauseScreen.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.game-over-content { text-align: center; }
+
+.game-over-title, .pause-title {
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  font-size: clamp(32px, 5vw, 56px);
+  color: #fff;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+.game-over-tagline {
+  font-weight: 200;
+  font-size: 12px;
+  letter-spacing: 0.4em;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+.score-final {
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  font-size: clamp(48px, 7vw, 86px);
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.score-label, .distance-final {
+  font-weight: 200;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+.restart-btn, .resume-btn {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #fff;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 14px 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.restart-btn:hover, .resume-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+
+.controls-hint {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.controls-hint p {
+  font-weight: 200;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  margin: 6px 0;
+}@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400;600&family=Raleway:wght@100;200;300;400&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #050508;
+  overflow: hidden;
+  font-family: 'Raleway', sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#gameCanvas {
+  display: block;
+  position: absolute;
+  top: 0; left: 0;
+}
+
+#startScreen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #111 0%, #050508 100%);
+  z-index: 100;
+  transition: transform 1.5s cubic-bezier(0.5, 0, 0.1, 1), opacity 1.5s ease;
+}
+
+#startScreen.scroll-up {
+  transform: translateY(-100vh);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.start-logo { text-align: center; margin-bottom: 40px; }
+.start-logo h1 {
+  font-family: 'Cinzel', serif; font-weight: 300; font-size: clamp(42px, 8vw, 86px);
+  letter-spacing: 0.15em; color: #fff; line-height: 1;
+}
+.start-logo .subtitle {
+  font-weight: 100; font-size: clamp(12px, 2vw, 16px); letter-spacing: 0.5em;
+  color: rgba(255,255,255,0.5); margin-top: 10px; text-transform: uppercase;
+}
+
+.story-text {
+  text-align: center; color: rgba(255,255,255,0.7); font-weight: 200;
+  letter-spacing: 0.1em; margin-bottom: 60px; line-height: 1.8;
+}
+
+.tap-prompt {
+  font-weight: 200; font-size: clamp(14px, 2.5vw, 18px); letter-spacing: 0.3em;
+  color: #fff; text-transform: uppercase; animation: pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+
+.start-snowflakes { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.start-snowflake { position: absolute; top: -10px; color: rgba(255,255,255,0.5); font-size: 12px; animation: snowFall linear infinite; }
+@keyframes snowFall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; } 90% { opacity: 0.5; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+#hud { position: absolute; inset: 0; pointer-events: none; z-index: 10; opacity: 0; transition: opacity 0.5s ease; }
+#hud.visible { opacity: 1; }
+
+#scoreDisplay { position: absolute; top: 28px; left: 50%; transform: translateX(-50%); text-align: center; }
+#scoreValue { font-family: 'Cinzel', serif; font-weight: 300; font-size: clamp(28px, 4vw, 48px); color: #fff; line-height: 1; }
+#distanceValue { font-weight: 200; font-size: clamp(11px, 1.5vw, 14px); letter-spacing: 0.3em; color: rgba(255,255,255,0.5); text-transform: uppercase; margin-top: 4px; }
+
+#comboDisplay {
+  position: absolute; top: 28px; left: 28px; font-family: 'Cinzel', serif;
+  font-size: clamp(16px, 2.5vw, 24px); color: #fff; opacity: 0; transition: opacity 0.3s;
+}
+#comboDisplay.visible { opacity: 1; }
+
+#trickText {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-family: 'Cinzel', serif; font-size: clamp(20px, 3vw, 32px); color: #fff;
+  pointer-events: none; opacity: 0; transition: opacity 0.4s;
+}
+
+#pauseBtn {
+  position: absolute; top: 24px; right: 28px; width: 40px; height: 40px;
+  cursor: pointer; pointer-events: all; opacity: 0.5; transition: opacity 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+#pauseBtn:hover { opacity: 1; }
+.pause-bar { width: 3px; height: 18px; background: #fff; }
+
+#gameOverScreen, #pauseScreen {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; background: rgba(5,5,8,0.9);
+  z-index: 50; opacity: 0; pointer-events: none; transition: opacity 0.8s ease;
+}
+#gameOverScreen.visible, #pauseScreen.visible { opacity: 1; pointer-events: all; }
+
+.game-over-content { text-align: center; }
+.game-over-title, .pause-title { font-family: 'Cinzel', serif; font-weight: 300; font-size: clamp(32px, 5vw, 56px); color: #fff; letter-spacing: 0.1em; margin-bottom: 10px; }
+.game-over-tagline { font-weight: 200; font-size: 12px; letter-spacing: 0.4em; color: #ff5555; text-transform: uppercase; margin-bottom: 40px; }
+
+.score-final { font-family: 'Cinzel', serif; font-weight: 300; font-size: clamp(48px, 7vw, 86px); color: #fff; line-height: 1; margin-bottom: 8px; }
+.score-label, .distance-final { font-weight: 200; font-size: 12px; letter-spacing: 0.3em; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 20px; }
+.coins-final { font-weight: 400; font-size: 14px; letter-spacing: 0.2em; color: #FFD700; text-transform: uppercase; margin-bottom: 40px; }
+
+.restart-btn, .resume-btn {
+  font-family: 'Raleway', sans-serif; font-weight: 300; font-size: 14px; letter-spacing: 0.3em;
+  text-transform: uppercase; color: #fff; background: transparent; border: 1px solid rgba(255,255,255,0.3);
+  padding: 14px 40px; cursor: pointer; transition: all 0.3s ease;
+}
+.restart-btn:hover, .resume-btn:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+
+.controls-hint { margin-top: 40px; text-align: center; }
+.controls-hint p { font-weight: 200; font-size: 11px; letter-spacing: 0.2em; color: rgba(255,255,255,0.3); text-transform: uppercase; margin: 6px 0; }
