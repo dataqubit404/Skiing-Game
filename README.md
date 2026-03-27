@@ -3,6 +3,9 @@
 
 **Zen's Slope** is a minimalist, procedurally generated 2D snowboarding odyssey. Navigate an infinite mountain range, perform death-defying flips, and survive the ever-shifting elements of the high peaks.
 
+Live Demo : https://zens-slope.vercel.app/
+
+
 ## 🌟 Key Features
 
 ### 🏔️ Dynamic Environment
